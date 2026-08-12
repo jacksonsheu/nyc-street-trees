@@ -39,7 +39,11 @@ interface RequestOptions {
 }
 
 function buildUrl(path: string, params?: RequestOptions['params']): string {
-  const url = new URL(`${API_BASE_URL}${path}`);
+  // Passing window.location.origin as the base lets this resolve correctly whether
+  // API_BASE_URL is relative (e.g. "/api" in production, same-origin deployment)
+  // or absolute (e.g. "http://localhost:8080/api" in local dev) — `new URL()`
+  // ignores the base whenever the first argument is already absolute.
+  const url = new URL(`${API_BASE_URL}${path}`, window.location.origin);
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined) {
