@@ -1,0 +1,503 @@
+:root {
+  --color-primary: #1b5e20;
+  --color-primary-dark: #0f3d13;
+  --color-primary-light: #4c8c4a;
+  --color-accent: #2e7d32;
+  --color-danger: #c62828;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f4f6f4;
+  --color-border: #dfe3df;
+  --color-text: #1a1f1b;
+  --color-text-muted: #5b645d;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+}
+
+button {
+  font-family: inherit;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
+}
+
+.app-header h1 {
+  font-size: 1.15rem;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.map-container {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  /* Leaflet's internal panes/controls use z-indexes up to 1000, which would
+     otherwise escape this container and render above the header/panel no
+     matter how high their z-index is set. Isolating creates a contained
+     stacking context so those internal z-indexes never leak out. */
+  isolation: isolate;
+}
+
+.map-view {
+  height: 100%;
+  width: 100%;
+}
+
+.search-area-button {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  box-shadow: var(--shadow-elevated);
+}
+
+.map-status-banner {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  background: var(--color-surface);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-elevated);
+  font-size: 0.9rem;
+  max-width: 90%;
+  text-align: center;
+}
+
+.map-status-banner--error {
+  background: #fdecea;
+  color: var(--color-danger);
+}
+
+/* Address search */
+
+.address-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 28rem;
+  position: relative;
+}
+
+.address-search__input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.address-search__input {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.address-search__input:focus {
+  outline: 2px solid white;
+  outline-offset: 1px;
+}
+
+.address-search__clear {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+}
+
+.address-search__clear:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.address-search__error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 0.35rem 0 0;
+  padding: 0.4rem 0.6rem;
+  background: #fdecea;
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  box-shadow: var(--shadow-elevated);
+  white-space: nowrap;
+  /* Leaflet's own panes (tiles/markers/popups) use z-indexes up to ~700,
+     so this needs to sit well above them to stay visible over the map. */
+  z-index: 1000;
+}
+
+/* Buttons */
+
+.button {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.button--primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.button--secondary {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.button--secondary:hover:not(:disabled) {
+  background: #e7ebe7;
+}
+
+.button--ghost {
+  background: transparent;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.app-header .button--ghost {
+  color: white;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.button--ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.button--small {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.button__icon {
+  display: inline-flex;
+  width: 1.1em;
+  justify-content: center;
+  margin-right: 0.3em;
+}
+
+.spinner {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Detail panel */
+
+.detail-panel {
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  padding: 1.5rem;
+  overflow-y: auto;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.06);
+}
+
+.detail-panel__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0.25rem 0.5rem;
+}
+
+.detail-panel__header h2 {
+  margin: 0 0 0.15rem;
+  font-size: 1.3rem;
+}
+
+.detail-panel__subtitle {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.detail-panel__section {
+  margin-bottom: 1.25rem;
+}
+
+.detail-panel__section-title {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.detail-panel__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.detail-row__label {
+  color: var(--color-text-muted);
+}
+
+.detail-row__value {
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Forms */
+
+.interaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.interaction-form h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.form-error {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.muted-text {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Interaction history */
+
+.interaction-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.interaction-history__item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.85rem;
+}
+
+.interaction-history__icon {
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.interaction-history__description {
+  margin: 0;
+}
+
+.interaction-history__timestamp {
+  margin: 0.1rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+/* Map markers */
+
+/* Recolors the default blue Leaflet pin to magenta for the selected tree marker. */
+.tree-marker--selected {
+  filter: hue-rotate(100deg) saturate(1.4) brightness(0.95);
+}
+
+.user-location-marker__dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1976d2;
+  border: 3px solid white;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.4);
+}
+
+/* Toasts */
+
+.toast-stack {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 2000;
+}
+
+.toast {
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-elevated);
+  font-size: 0.9rem;
+  color: white;
+  animation: toast-in 0.15s ease-out;
+}
+
+.toast--success {
+  background: var(--color-accent);
+}
+
+.toast--error {
+  background: var(--color-danger);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive: stack the detail panel below the map on small screens */
+
+@media (max-width: 720px) {
+  .app-body {
+    flex-direction: column;
+  }
+
+  .map-container {
+    flex: 1 1 55%;
+  }
+
+  .detail-panel {
+    width: 100%;
+    max-height: 45%;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .toast-stack {
+    right: 0.75rem;
+    left: 0.75rem;
+    bottom: 0.75rem;
+  }
+}

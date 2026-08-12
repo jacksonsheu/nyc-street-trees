@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: nyc-trees
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/trees/test
+    envVars:
+      # Global cap on stored tree interactions (in-memory demo store).
+      - key: APP_INTERACTIONS_MAX_TOTAL
+        value: 1000
+      # Per-client-IP rate limit on write endpoints.
+      - key: APP_RATE_LIMIT_CAPACITY
+        value: 20
+      - key: APP_RATE_LIMIT_REFILL_PERIOD_SECONDS
+        value: 60
+      # Not required for the embedded frontend (same-origin requests skip CORS),
+      # but useful if the mobile app or another origin calls this API directly.
+      # Replace with your Render service URL once known, e.g.
+      # https://nyc-trees.onrender.com
+      - key: APP_CORS_ALLOWED_ORIGINS
+        value: https://nyc-trees.onrender.com

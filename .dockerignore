@@ -1,0 +1,12 @@
+node_modules/
+web/node_modules/
+web/dist/
+mobile/node_modules/
+mobile/.expo/
+mobile/.expo-shared/
+backend/.gradle/
+backend/build/
+backend/src/main/resources/static/
+.git/
+.idea/
+*.iml

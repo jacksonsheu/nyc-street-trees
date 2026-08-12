@@ -1,0 +1,11 @@
+{
+  "name": "nyc-trees-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mobile client for the NYC street trees app",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  }
+}

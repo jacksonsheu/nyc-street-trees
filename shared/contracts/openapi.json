@@ -1,0 +1,369 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "NYC Street Trees API",
+        "description": "Endpoints for discovering NYC street trees and recording user interactions (maintenance requests, waterings).",
+        "contact": {
+            "name": "NYC Trees POC"
+        },
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/trees/{treeId}/waterings": {
+            "post": {
+                "tags": [
+                    "tree-controller"
+                ],
+                "operationId": "submitWatering",
+                "parameters": [
+                    {
+                        "name": "treeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WateringInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TreeInteraction"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/trees/{treeId}/maintenance-requests": {
+            "post": {
+                "tags": [
+                    "tree-controller"
+                ],
+                "operationId": "submitMaintenanceRequest",
+                "parameters": [
+                    {
+                        "name": "treeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaintenanceRequestInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TreeInteraction"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/trees/{treeId}": {
+            "get": {
+                "tags": [
+                    "tree-controller"
+                ],
+                "operationId": "getTreeDetails",
+                "parameters": [
+                    {
+                        "name": "treeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TreeSummary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/trees/{treeId}/interactions": {
+            "get": {
+                "tags": [
+                    "tree-controller"
+                ],
+                "operationId": "getInteractions",
+                "parameters": [
+                    {
+                        "name": "treeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TreeInteraction"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/trees/test": {
+            "get": {
+                "tags": [
+                    "tree-controller"
+                ],
+                "operationId": "test",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/trees/nearby": {
+            "get": {
+                "tags": [
+                    "tree-controller"
+                ],
+                "operationId": "getNearbyTrees",
+                "parameters": [
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "format": "double",
+                            "maximum": 90.0,
+                            "minimum": -90.0
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "format": "double",
+                            "maximum": 180.0,
+                            "minimum": -180.0
+                        }
+                    },
+                    {
+                        "name": "radiusMeters",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 250,
+                            "exclusiveMinimum": 0,
+                            "maximum": 2000
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 25,
+                            "maximum": 500,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TreeSummary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "WateringInput": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "liters": {
+                        "type": "number",
+                        "format": "double",
+                        "minimum": 0
+                    }
+                },
+                "required": [
+                    "userId"
+                ]
+            },
+            "TreeInteraction": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "treeId": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "MAINTENANCE_REQUEST",
+                            "WATERING"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "details": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    }
+                }
+            },
+            "MaintenanceRequestInput": {
+                "type": "object",
+                "properties": {
+                    "requestedBy": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "issueType": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "description": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "required": [
+                    "description",
+                    "issueType",
+                    "requestedBy"
+                ]
+            },
+            "TreeSummary": {
+                "type": "object",
+                "properties": {
+                    "treeId": {
+                        "type": "string"
+                    },
+                    "commonName": {
+                        "type": "string"
+                    },
+                    "latinName": {
+                        "type": "string"
+                    },
+                    "diameterAtBreastHeightInches": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "health": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "problems": {
+                        "type": "string"
+                    },
+                    "neighborhoodTabulationAreaName": {
+                        "type": "string"
+                    },
+                    "borough": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "zipCode": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            }
+        }
+    }
+}

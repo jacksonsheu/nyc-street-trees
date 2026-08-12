@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.nyctrees'
+version = '0.0.1-SNAPSHOT'
+description = 'nyc-trees poc backend'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(26)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // In-memory token-bucket rate limiting for public write endpoints, protecting
+    // low-tier demo deployments from scripted spam/abuse.
+    implementation 'com.bucket4j:bucket4j_jdk11-core:8.14.0'
+    // Generates the OpenAPI spec from controller/DTO annotations at runtime,
+    // giving web/mobile clients one generated source of truth instead of
+    // hand-duplicated request/response types (see shared/contracts).
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Fixed jar name so deployment tooling (Dockerfile, start commands) doesn't
+// need to glob/guess the versioned artifact filename.
+bootJar {
+    archiveFileName = 'app.jar'
+}
+
+
+
