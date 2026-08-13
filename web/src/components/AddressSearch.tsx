@@ -71,15 +71,15 @@ export function AddressSearch({ onLocationFound }: AddressSearchProps) {
             ✕
           </button>
         )}
+        <button
+          type="submit"
+          className="address-search__submit"
+          disabled={mutation.isPending || !query.trim()}
+          aria-label="Search"
+        >
+          {showSearchSpinner ? <Spinner /> : '🔍'}
+        </button>
       </div>
-      <button
-        type="submit"
-        className="button button--ghost button--small"
-        disabled={mutation.isPending || !query.trim()}
-      >
-        <span className="button__icon">{showSearchSpinner ? <Spinner /> : '🔍'}</span>
-        Search
-      </button>
       {showError && <p className="address-search__error">{(mutation.error as Error).message}</p>}
     </form>
   );

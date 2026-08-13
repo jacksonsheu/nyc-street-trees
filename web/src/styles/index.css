@@ -131,7 +131,7 @@ button {
 
 .address-search__input {
   width: 100%;
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  padding: 0.5rem 4.3rem 0.5rem 0.75rem;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.95);
@@ -146,7 +146,7 @@ button {
 
 .address-search__clear {
   position: absolute;
-  right: 0.4rem;
+  right: 2.1rem;
   top: 50%;
   transform: translateY(-50%);
   border: none;
@@ -162,6 +162,34 @@ button {
 .address-search__clear:hover {
   background: var(--color-surface-muted);
   color: var(--color-text);
+}
+
+.address-search__submit {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 50%;
+}
+
+.address-search__submit:hover:not(:disabled) {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.address-search__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .address-search__error {
@@ -491,13 +519,14 @@ button {
 
   .address-search {
     order: 2;
-    flex: 1 1 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     max-width: none;
   }
 
   .app-header .button--ghost {
     order: 3;
-    margin-left: auto;
+    flex-shrink: 0;
   }
 
   .app-body {
