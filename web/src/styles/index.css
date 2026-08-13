@@ -479,6 +479,27 @@ button {
 /* Responsive: stack the detail panel below the map on small screens */
 
 @media (max-width: 720px) {
+  .app-header {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .app-header h1 {
+    flex: 1 1 100%;
+    font-size: 1rem;
+  }
+
+  .address-search {
+    order: 2;
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .app-header .button--ghost {
+    order: 3;
+    margin-left: auto;
+  }
+
   .app-body {
     flex-direction: column;
   }
