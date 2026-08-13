@@ -519,7 +519,7 @@ button {
 
   .address-search {
     order: 2;
-    flex: 1 1 auto;
+    flex: 1 1 0%;
     min-width: 0;
     max-width: none;
   }
