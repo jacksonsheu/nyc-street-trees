@@ -1,7 +1,11 @@
-# NYC Street Trees Monorepo
+# NYC Street Trees
 
-Monorepo for a Spring Boot backend with web and mobile clients, sharing a
-single generated API contract.
+Web app built on NYC's public dataset for street trees, featuring an interactive map that allows users to view details of nearby trees and interact with them by watering or submitting maintenance requests. Spring Boot/Java backend with React web client. 
+
+Live website: https://nyc-trees.onrender.com/
+
+<img width="1094" height="674" alt="image" src="https://github.com/user-attachments/assets/32778e44-c849-4998-baa5-d34edf7d7dcc" />
+
 
 ## Structure
 
@@ -9,7 +13,7 @@ single generated API contract.
 .
 ├── backend/         # Spring Boot API
 ├── web/              # React web app
-├── mobile/           # React Native / Expo mobile app (next step)
+├── mobile/           # future mobile app
 ├── shared/contracts/ # Generated OpenAPI spec — the single source of truth
 │                      # for request/response shapes across clients
 └── scripts/          # Repo-wide dev scripts (contract regeneration, etc.)
@@ -24,21 +28,4 @@ single generated API contract.
    - `cd web`
    - `npm install`
    - `npm run dev`
-3. Mobile:
-   - `cd mobile`
-   - `npm install`
-   - `npm run start`
 
-## API contract
-
-The backend's DTOs/controllers are the source of truth. `shared/contracts/openapi.json`
-and the web app's `src/types/api.generated.ts` are both generated artifacts —
-regenerate them after changing a backend DTO or endpoint:
-
-```bash
-# with the backend running (./gradlew bootRun)
-./scripts/generate-openapi-spec.sh
-cd web && npm run generate:types
-```
-
-See `shared/contracts/README.md` for details.
